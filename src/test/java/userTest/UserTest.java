@@ -1,5 +1,8 @@
 package userTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -11,31 +14,41 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.alibaba.fastjson.JSON;
 import com.hdsx.restful.models.User;
 import com.hdsx.restful.service.UserService;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 // 表示继承了SpringJUnit4ClassRunner类
 @ContextConfiguration(locations = { "classpath:spring-mybatis.xml" })
 public class UserTest {
 
-    private static Logger logger = Logger.getLogger(UserTest.class);
 //    private ApplicationContext ac = null;
+
     @Resource
     private UserService userService = null;
 
 //     @Before
 //     public void before() {
-//     ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+//     ac = new ClassPathXmlApplicationContext("spring-mvc.xml");
 //     userService = (UserService) ac.getBean("userService");
 //     }
 
     @Test
-    public void userById() {
+    public void userByIdTest() {
         User user = userService.getUserById(1);
-         System.out.println(user.getUserName());
-        // logger.info("值："+user.getUserName());
-        logger.info(JSON.toJSONString(user));
+        System.out.println(user.getUserName());
+    }
+
+    @Test
+    public void insertUsersTest() {
+        List<User> users = new ArrayList<User>();
+        for(int i=1;i<5;i++){
+            User user = new User();
+            user.setAge(i);
+            user.setPassword(i+"111111");
+            user.setUserName("测试"+i);
+            users.add(user);
+        }
+        this.userService.insertUsers(users);
     }
 }
